@@ -684,6 +684,13 @@
         image: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=1200,height=1200,fit=cover,f=png/bdeea6562dcab80a1905969266b0de38/happy-wheels-logo.png",
         type: "url",
         content: "https://mrsnailman.github.io/Happy-Wheels-Source-Code/index.html"
+      },
+      {
+        id: "referee-simulator",
+        title: "Referee Simulator",
+        image: "https://media.vandal.net/i/1280x720/8-2021/referee-simulator-20218616164740_11.jpg",
+        type: "url",
+        content: "https://prohidus777.github.io/REFEREE-SIMULATOR/"
       }
     ];
 
@@ -711,13 +718,49 @@
       }
       // Añadir los juegos incorporados recientemente a las listas guardadas sin borrar los cambios del usuario.
       const newlyAddedGames = DEFAULT_GAMES.filter(game =>
-        ['geometry-dash', 'mini-formula-1', 'happy-wheels'].includes(game.id)
+        ['geometry-dash', 'mini-formula-1', 'happy-wheels', 'referee-simulator'].includes(game.id)
       );
       let gamesUpdated = false;
       if (Array.isArray(games)) {
         newlyAddedGames.forEach(newGame => {
           if (!games.some(game => game && game.id === newGame.id)) {
             games.push({ ...newGame });
+            gamesUpdated = true;
+          }
+        });
+        // Asegurar que Referee Simulator siempre abra la web indicada por el usuario,
+        // incluso si el navegador conserva una ficha anterior en localStorage.
+        const refereeDefault = DEFAULT_GAMES.find(game => game.id === 'referee-simulator');
+        const refereeEntries = games.filter(game => game && game.id === 'referee-simulator');
+        refereeEntries.forEach(game => {
+          if (game.type !== refereeDefault.type) {
+            game.type = refereeDefault.type;
+            gamesUpdated = true;
+          }
+          if (game.content !== refereeDefault.content) {
+            game.content = refereeDefault.content;
+            gamesUpdated = true;
+          }
+          if (game.image !== refereeDefault.image) {
+            game.image = refereeDefault.image;
+            gamesUpdated = true;
+          }
+          if (game.title !== refereeDefault.title) {
+            game.title = refereeDefault.title;
+            gamesUpdated = true;
+          }
+        });
+        // Asegurar que Mini Formula 1 abra la web exacta indicada por el usuario,
+        // incluso si el navegador conserva una URL anterior en localStorage.
+        const formulaDefault = DEFAULT_GAMES.find(game => game.id === 'mini-formula-1');
+        const formulaEntries = games.filter(game => game && game.id === 'mini-formula-1');
+        formulaEntries.forEach(game => {
+          if (game.type !== formulaDefault.type) {
+            game.type = formulaDefault.type;
+            gamesUpdated = true;
+          }
+          if (game.content !== formulaDefault.content) {
+            game.content = formulaDefault.content;
             gamesUpdated = true;
           }
         });
@@ -775,7 +818,8 @@
       'granny': ['Terror', 'Aventura'],
       'geometry-dash': ['Arcade'],
       'mini-formula-1': ['Carreras', 'Deportes'],
-      'happy-wheels': ['Arcade', 'Acción']
+      'happy-wheels': ['Arcade', 'Acción'],
+      'referee-simulator': ['Deportes']
     };
 
     function getGameCategories(game) {
@@ -1072,3 +1116,4 @@
   </script>
 </body>
 </html>
+
